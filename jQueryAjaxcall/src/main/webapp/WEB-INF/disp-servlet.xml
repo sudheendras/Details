@@ -1,0 +1,42 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+
+<context:component-scan base-package="com.sudheendra.*" />
+<mvc:annotation-driven/>
+
+<!-- Hibernate session factory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource"> <ref bean="dataSource"/></property>
+    	<property name="hibernateProperties">
+       		<props>
+         		<prop key="hibernate.show_sql">true</prop>
+         		<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+       		</props>
+    	</property>
+    	<property name="annotatedClasses">
+			<list>
+				<value>com.sudheendra.entity.Login</value>
+			</list>
+    	</property>
+    </bean>
+    <bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<property name="username" value="system" />
+		<property name="password" value="manager" />
+	</bean>
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    	<property name="prefix" value="/WEB-INF/views/" />
+    	<property name="suffix" value=".jsp" />
+	</bean>
+</beans>
